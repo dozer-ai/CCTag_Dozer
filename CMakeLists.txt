@@ -163,7 +163,7 @@ if(CCTAG_WITH_CUDA)
     message(STATUS "Building in release mode")
   endif()
 
-  set(CCTAG_CUDA_CC_LIST_INIT0 3.5 3.7 5.0 5.2)
+  set(CCTAG_CUDA_CC_LIST_INIT0 3.5 3.7 5.0 5.2 5.3)
   if( CUDA_VERSION VERSION_GREATER_EQUAL "9.0" )
     list(APPEND CCTAG_CUDA_CC_LIST_INIT0 6.0 6.1 7.0)
   endif()
