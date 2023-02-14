@@ -8,10 +8,8 @@ if(NOT CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
 
   set(CMAKE_CXX_STANDARD 14)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
-endif()
 
-# if this is used as a stand-alone project we need to tell whether to use PIC
-if(NOT DEFINED BUILD_SHARED_LIBS)
+  # if this is used as a stand-alone project we need to tell whether to use PIC
   option(BUILD_SHARED_LIBS "Build shared libraries" ON)
   set(CMAKE_POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})
 endif()
@@ -82,11 +80,10 @@ find_package(DevIL COMPONENTS IL ILU) # yields IL_FOUND, IL_LIBRARIES, IL_INCLUD
 
 target_include_directories(detection PUBLIC
   ${OpenCV_INCLUDE_DIRS}
-  ${TBB_INCLUDE_DIRS}
   )
 target_link_libraries(detection PUBLIC
   CCTag::CCTag
-  ${TBB_LIBRARIES}
+  TBB::tbb
   ${OpenCV_LIBS}
   Boost::filesystem Boost::program_options Boost::timer
   )

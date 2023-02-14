@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.13)
 
 include(ExternalProject)
 
-project(CCTag VERSION 1.0.2 LANGUAGES C CXX)
+project(CCTag VERSION 1.0.3 LANGUAGES C CXX)
 
 # Set build path as a folder named as the platform (linux, windows, darwin...) plus the processor type
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
@@ -21,13 +21,14 @@ option(CCTAG_WITH_CUDA "Compile the library with CUDA support" ON)
 option(CCTAG_BUILD_APPS "Build the sample applications" ON)
 option(CCTAG_CUDA_CC_CURRENT_ONLY "Set to on to build only for the current machine's CC" OFF)
 option(CCTAG_NVCC_WARNINGS "Switch on several additional warnings for CUDA nvcc." OFF)
-option(CCTAG_EIGEN_NO_ALIGN "Disable Eigen alignment" ON)
+option(CCTAG_EIGEN_MEMORY_ALIGNMENT "Enable Eigen alignment" OFF)
 
 option(CCTAG_USE_POSITION_INDEPENDENT_CODE "Generate position independent code." ON)
 option(CCTAG_ENABLE_SIMD_AVX2 "Enable AVX2 optimizations" OFF)
 option(CCTAG_BUILD_TESTS "Build the unity tests" ON)
 option(CCTAG_BUILD_DOC "Build documentation" OFF)
 option(CCTAG_NO_THRUST_COPY_IF "Do not use thrust::copy_if() on GPU. There may be a bug on CUDA 7 with GTX 980, 980Ti and 1080" OFF)
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 
@@ -124,6 +125,7 @@ if(CCTAG_BUILD_TESTS)
 endif()
 
 find_package(Boost 1.66.0 REQUIRED COMPONENTS ${BOOST_REQUIRED_COMPONENTS})
+message(STATUS "Found Boost: version ${Boost_VERSION}")
 
 if(BUILD_SHARED_LIBS)
   if(WIN32)
@@ -232,14 +234,15 @@ if(MSVC AND CCTAG_WITH_CUDA)
 endif()
 find_package(Eigen3 ${CCTAG_EIGEN_REQUIRED_VERSION} REQUIRED)
 message(STATUS "Found Eigen: version ${Eigen3_VERSION}")
-if(CCTAG_EIGEN_NO_ALIGN)
+if(NOT CCTAG_EIGEN_MEMORY_ALIGNMENT)
   set(AV_EIGEN_DEFINITIONS -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_MAX_STATIC_ALIGN_BYTES=0)
 endif()
 
 # FIND Intel TBB
 # With MVSC, CMAKE_BUILD_TYPE will always be None, so TBB_USE_DEBUG_BUILD will always be false.
 string(COMPARE EQUAL "${CMAKE_BUILD_TYPE}" Debug TBB_USE_DEBUG_BUILD)
-find_package(TBB REQUIRED)
+find_package(TBB 2021.5.0 CONFIG REQUIRED)
+message(STATUS "Found TBB: version ${TBB_VERSION}")
 
 add_subdirectory(src)
 
@@ -272,7 +275,7 @@ message(STATUS "Cuda support: " ${CCTAG_WITH_CUDA})
 if(CCTAG_WITH_CUDA)
   message(STATUS "Compiling for CUDA CCs: ${ARCH_FLAGS}")
 endif()
-message(STATUS "Disable Eigen alignment: " ${CCTAG_EIGEN_NO_ALIGN})
+message(STATUS "Enable Eigen alignment: " ${CCTAG_EIGEN_MEMORY_ALIGNMENT})
 message(STATUS "Enable AVX2 optimizations: " ${CCTAG_ENABLE_SIMD_AVX2})
 message(STATUS "[debug] Serialize all the output: " ${CCTAG_SERIALIZE})
 message(STATUS "[debug] Enable visual debug: " ${CCTAG_VISUAL_DEBUG})
