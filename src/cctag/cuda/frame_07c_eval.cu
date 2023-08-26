@@ -19,6 +19,8 @@ using namespace std;
 
 #define CONC_POINTS 8
 
+#define BLOCK_SIZE 16
+
 namespace cctag {
 
 namespace vote {
@@ -50,8 +52,8 @@ void count_winners( FrameMetaPtr&                   meta,
      * a manually partially unrolled loop.
      */
     const int voter_list_size = meta.list_size_voters();
-    const int start_offset = 32 * threadIdx.y + threadIdx.x;
-    const int inc_offset   = 32*32;
+    const int start_offset = BLOCK_SIZE * threadIdx.y + threadIdx.x;
+    const int inc_offset   = BLOCK_SIZE*BLOCK_SIZE;
     for( int i=start_offset; i<voter_list_size; i+=inc_offset ) {
         const int my_vote = chosen_idx.ptr[i];
         for( int point=0; point<CONC_POINTS; point++ ) {
@@ -82,8 +84,8 @@ void count_winners( FrameMetaPtr&                   meta,
         flow_length[point]  = cctag::shuffle     ( flow_length[point],  0 );
     }
 
-    __shared__ int   winner_array[CONC_POINTS][32];
-    __shared__ float length_array[CONC_POINTS][32];
+    __shared__ int   winner_array[CONC_POINTS][BLOCK_SIZE];
+    __shared__ float length_array[CONC_POINTS][BLOCK_SIZE];
 
     if( threadIdx.x < CONC_POINTS ) {
         const int point = threadIdx.x;
@@ -168,7 +170,7 @@ void dp_call_eval_chosen( FrameMetaPtr             meta,
 {
     int listsize = meta.list_size_interm_inner_points();
 
-    dim3 block( 32, 32, 1 );
+    dim3 block( BLOCK_SIZE, BLOCK_SIZE, 1 );
     dim3 grid ( grid_divide( listsize, CONC_POINTS ), 1, 1 );
 
     vote::eval_chosen
@@ -230,7 +232,7 @@ bool Frame::applyVoteEval( )
     /* Add number of voters to chosen inner points, and
      * add average flow length to chosen inner points.
      */
-    dim3 block( 32, 32, 1 );
+    dim3 block( BLOCK_SIZE, BLOCK_SIZE, 1 );
     dim3 grid ( grid_divide( _interm_inner_points.host.size, CONC_POINTS ), 1, 1 );
 
     vote::eval_chosen

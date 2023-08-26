@@ -19,7 +19,7 @@ option(CCTAG_VISUAL_DEBUG "Enable visual debug" OFF)
 option(CCTAG_NO_COUT "Disable output stream" ON)
 option(CCTAG_WITH_CUDA "Compile the library with CUDA support" ON)
 option(CCTAG_BUILD_APPS "Build the sample applications" ON)
-option(CCTAG_CUDA_CC_CURRENT_ONLY "Set to on to build only for the current machine's CC" OFF)
+option(CCTAG_CUDA_CC_CURRENT_ONLY "Set to on to build only for the current machine's CC" ON)
 option(CCTAG_NVCC_WARNINGS "Switch on several additional warnings for CUDA nvcc." OFF)
 option(CCTAG_EIGEN_NO_ALIGN "Disable Eigen alignment" ON)
 

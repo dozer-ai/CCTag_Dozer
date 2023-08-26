@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!DOCTYPE boost_serialization>
+<boost_serialization signature="serialization::archive" version="17">
+<CCTagsParams class_id="0" tracking_level="0" version="0">
+	<_cannyThrLow>9.999999776e-03</_cannyThrLow>
+	<_cannyThrHigh>3.999999911e-02</_cannyThrHigh>
+	<_distSearch>30</_distSearch>
+	<_thrGradientMagInVote>2500</_thrGradientMagInVote>
+	<_angleVoting>0.000000000e+00</_angleVoting>
+	<_ratioVoting>4.000000000e+00</_ratioVoting>
+	<_averageVoteMin>0.000000000e+00</_averageVoteMin>
+	<_thrMedianDistanceEllipse>3.000000000e+00</_thrMedianDistanceEllipse>
+	<_maximumNbSeeds>500</_maximumNbSeeds>
+	<_maximumNbCandidatesLoopTwo>40</_maximumNbCandidatesLoopTwo>
+	<_nCrowns>3</_nCrowns>
+	<_minPointsSegmentCandidate>10</_minPointsSegmentCandidate>
+	<_minVotesToSelectCandidate>3</_minVotesToSelectCandidate>
+	<_threshRobustEstimationOfOuterEllipse>3.000000000e+01</_threshRobustEstimationOfOuterEllipse>
+	<_ellipseGrowingEllipticHullWidth>2.299999952e+00</_ellipseGrowingEllipticHullWidth>
+	<_windowSizeOnInnerEllipticSegment>20</_windowSizeOnInnerEllipticSegment>
+	<_numberOfMultiresLayers>4</_numberOfMultiresLayers>
+	<_numberOfProcessedMultiresLayers>4</_numberOfProcessedMultiresLayers>
+	<_nSamplesOuterEllipse>150</_nSamplesOuterEllipse>
+	<_numCutsInIdentStep>22</_numCutsInIdentStep>
+	<_numSamplesOuterEdgePointsRefinement>20</_numSamplesOuterEdgePointsRefinement>
+	<_cutsSelectionTrials>500</_cutsSelectionTrials>
+	<_sampleCutLength>100</_sampleCutLength>
+	<_imagedCenterNGridSample>5</_imagedCenterNGridSample>
+	<_imagedCenterNeighbourSize>2.000000030e-01</_imagedCenterNeighbourSize>
+	<_minIdentProba>9.999999975e-07</_minIdentProba>
+	<_useLMDif>1</_useLMDif>
+	<_searchForAnotherSegment>1</_searchForAnotherSegment>
+	<_writeOutput>0</_writeOutput>
+	<_doIdentification>1</_doIdentification>
+	<_maxEdges>20000</_maxEdges>
+	<_useCuda>1</_useCuda>
+	<_pinnedCounters>100</_pinnedCounters>
+	<_pinnedNearbyPoints>60</_pinnedNearbyPoints>
+</CCTagsParams>
+</boost_serialization>
+
