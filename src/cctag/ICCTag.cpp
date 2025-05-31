@@ -10,7 +10,6 @@
 #include <cctag/Detection.hpp>
 #include <cctag/utils/LogTime.hpp>
 
-#include <boost/foreach.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 

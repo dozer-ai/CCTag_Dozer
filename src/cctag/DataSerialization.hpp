@@ -15,7 +15,6 @@
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/archive/text_oarchive.hpp>
-#include <boost/foreach.hpp>
 
 namespace cctag {
 

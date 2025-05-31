@@ -16,9 +16,7 @@
 
 #include <opencv2/opencv.hpp>
 
-#include <boost/foreach.hpp>
 #include <boost/accumulators/statistics/median.hpp>
-#include <boost/foreach.hpp>
 #include <boost/math/special_functions/pow.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 

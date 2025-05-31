@@ -120,6 +120,7 @@ To install the dependencies:
           boost-container
           boost-date-time
           boost-exception
+          boost-foreach
           boost-filesystem
           boost-iterator
           boost-lexical-cast
@@ -141,6 +142,8 @@ To install the dependencies:
           opencv
           tbb
           eigen3
+
+Note that for boost >= 1.85 you have to use :code:`math[legacy]`.
 
 You can add the flag :code:`--triplet` to specify the architecture and the version you want to build.
 For example:

@@ -28,7 +28,6 @@
 #include "cctag/cuda/tag.h"
 #endif
 
-#include <boost/foreach.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <boost/mpl/bool.hpp>

@@ -12,9 +12,6 @@
 #include <cctag/Statistic.hpp>
 #include <cctag/geometry/Ellipse.hpp>
 
-#include <boost/foreach.hpp>
-
-
 namespace cctag {
 namespace numerical {
 namespace optimization {
