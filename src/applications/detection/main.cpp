@@ -21,7 +21,6 @@
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/exception/all.hpp>
 #include <boost/filesystem.hpp>
-#include <boost/filesystem/convenience.hpp>
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/timer/timer.hpp>
 #include <opencv2/core/core.hpp>
@@ -501,7 +500,7 @@ int main(int argc, char** argv)
         tbb::parallel_for(0, 2, [&](size_t fileListIdx) {
             for(const auto& fileInFolder : files[fileListIdx])
             {
-                const std::string subExt(bfs::extension(fileInFolder.second));
+                const std::string subExt(fileInFolder.second.extension().string());
 
                 if((subExt == ".png") || (subExt == ".jpg") || (subExt == ".PNG") || (subExt == ".JPG"))
                 {

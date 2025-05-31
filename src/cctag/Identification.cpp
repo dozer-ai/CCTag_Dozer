@@ -26,6 +26,7 @@
 #include <boost/accumulators/statistics/median.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
 #include <boost/assert.hpp>
+#include <boost/foreach.hpp>
 
 #include <cmath>
 #include <mutex>
@@ -60,7 +61,7 @@ bool orazioDistanceRobust(
 
   using MapT = std::map<float, MarkerID>;
 
-  if ( cuts.size() == 0 )
+  if ( cuts.empty() )
   {
     return false;
   }
@@ -570,9 +571,7 @@ void selectCutCheapUniform( std::vector< cctag::ImageCut > & vSelectedCuts,
   
   vSelectedCuts.clear();
   vSelectedCuts.reserve(selectSize);
-  
-  std::size_t sharpSize = 0;
-  
+
   // Initialize vector of indices of sharp cuts
   std::vector<std::size_t> indToAdd;
   indToAdd.reserve(varCuts.size());
@@ -700,12 +699,13 @@ std::pair<float,float> convImageCut(const std::vector<float> & kernel, ImageCut 
   //cut.imgSignal() = output;
   
   // Locate the maximum value.
-  std::vector<float>::iterator maxValueIt = std::max_element(output.begin(), output.end());
+  auto maxValueIt = std::max_element(output.begin(), output.end());
   float itsLocation = (float) std::distance(output.begin(), maxValueIt);
   
   //CCTAG_COUT_VAR2(*maxValueIt, itsLocation);
-  
-  return std::pair<float,float>(*maxValueIt,itsLocation);// max value, its location
+
+  // max value, its location
+  return {*maxValueIt, itsLocation};
 }
 
 /**
@@ -1261,7 +1261,7 @@ int identify_step_1(
   )
 #endif
 
-  if ( cuts.size() == 0 )
+  if ( cuts.empty() )
   {
     // Can happen when an object or the image frame is occluding a part of all available cuts.
     return status::no_collected_cuts;
@@ -1287,7 +1287,7 @@ int identify_step_1(
     const float spendTime = d.total_milliseconds();
   }
 
-  if ( vSelectedCuts.size() == 0 )
+  if ( vSelectedCuts.empty() )
   {
     CCTAG_COUT_DEBUG("Unable to select any cut.");
     return status::no_selected_cuts; // todo: is class attributes the best option?

@@ -20,7 +20,6 @@
 #include <cctag/utils/Defines.hpp>
 #include <cctag/utils/VisualDebug.hpp>
 
-#include <boost/foreach.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <boost/math/special_functions/log1p.hpp>

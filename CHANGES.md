@@ -15,6 +15,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [1.0.4] - 2024-06-23
+
+### Added
+
+- [ci] added a first github CI for windows without cuda [PR](https://github.com/alicevision/CCTag/pull/218)
+
+### Changed
+
+- [ci] added more test images for linux [PR](https://github.com/alicevision/CCTag/pull/207)
+
+### Fixed
+
+- compatibility issues with newer versions (>= 1.85) of boost [PR](https://github.com/alicevision/CCTag/pull/218)
+
 ## [1.0.3] - 2022-10-18
 
 ### Added
