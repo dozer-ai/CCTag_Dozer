@@ -12,7 +12,7 @@ namespace cctag
 {
 
 EdgePointCollection::EdgePointCollection(size_t w, size_t h) :
-  _edgeMap(new int[MAX_RESOLUTION*MAX_RESOLUTION]),
+  _edgeMap(new int[MAX_POINTS]),
   _edgeList(new EdgePoint[MAX_POINTS]),
   _linkList(new int[2*MAX_POINTS]),
   _votersIndex(new int[MAX_POINTS+CUDA_OFFSET]),
@@ -43,8 +43,10 @@ void EdgePointCollection::add_point(int vx, int vy, float vdx, float vdy)
     throw std::out_of_range("EdgePointCollection::add_point: coordinate out of range");
 
   size_t imap = map_index(vx, vy);
-  if (_edgeMap[imap] != -1)
+  if (_edgeMap[imap] != -1){
+    std::cout<<vx<<","<<vy<<","<<imap<<","<<_edgeMap[imap]<<","<<MAX_POINTS<< std::endl;
     throw std::logic_error("EdgePointCollection::add_point: point already exists");
+  }
 
   // XXX@stian: new() below is technically UB, but the class has no defined dtors
   // so it's safe to re-new it in place w/o calling the dtor firs.

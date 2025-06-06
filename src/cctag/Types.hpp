@@ -18,10 +18,11 @@ namespace cctag {
 
 class EdgePointCollection
 {
-public:
-  static constexpr size_t MAX_POINTS = size_t(1) << 24;
 private:
   static constexpr size_t MAX_RESOLUTION = 6144;
+public:
+  static constexpr size_t MAX_POINTS = MAX_RESOLUTION*MAX_RESOLUTION; //26?
+private:
   static constexpr size_t CUDA_OFFSET = 1024; // 4 kB, one page
   static constexpr size_t MAX_VOTERLIST_SIZE = 16*MAX_POINTS;
   
@@ -81,9 +82,9 @@ public:
     
   const size_t* shape() const { return _edgeMapShape; }
   
-  EdgePoint* operator()(int i) { return i >= 0 ? &_edgeList[i] : nullptr; }
+  EdgePoint* operator()(int i) { return ( (i<(MAX_RESOLUTION*MAX_RESOLUTION)) && i >= 0) ? &_edgeList[i] : nullptr; }
 
-  EdgePoint* operator()(int i) const { return i >= 0 ? const_cast<EdgePoint*>(&_edgeList[i]) : nullptr; }
+  EdgePoint* operator()(int i) const { return ( (i<(MAX_RESOLUTION*MAX_RESOLUTION)) && i >= 0) ? const_cast<EdgePoint*>(&_edgeList[i]) : nullptr; }
 
   EdgePoint* operator()(int x, int y) const { return (*this)(_edgeMap[map_index(x,y)]); }
 
