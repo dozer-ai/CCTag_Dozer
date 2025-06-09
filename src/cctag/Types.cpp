@@ -25,7 +25,10 @@ EdgePointCollection::EdgePointCollection(size_t w, size_t h) :
 
   point_count() = 0;
   _edgeMapShape[0] = w; _edgeMapShape[1] = h;
-  memset(&_edgeMap[0], -1, w*h*sizeof(int));  // XXX@stian: unnecessary for CUDA
+  for (size_t i = 0; i < MAX_POINTS; i++) {
+    _edgeMap[i] = -1;
+  }
+  // memset(&_edgeMap[0], -1, w*h*sizeof(int));  // XXX@stian: unnecessary for CUDA
   
   if (w*h/8+4 < MAX_POINTS) {
     memset(&_processedIn[0], 0, w*h/8+4);     // one bit per pixel + roundoff error
@@ -43,11 +46,24 @@ void EdgePointCollection::add_point(int vx, int vy, float vdx, float vdy)
     throw std::out_of_range("EdgePointCollection::add_point: coordinate out of range");
 
   size_t imap = map_index(vx, vy);
+  static std::vector<size_t> processed_imap_indices;
+  processed_imap_indices.reserve(MAX_POINTS);
+
+  for(size_t i = 0; i < MAX_POINTS; i++){
+    const auto res = std::find(processed_imap_indices.begin(), processed_imap_indices.end(), i);
+    if (_edgeMap[i] != -1){
+      if(res==processed_imap_indices.end())
+        throw std::logic_error(std::string("not processed but non default values: index:") + std::to_string(i));
+    } else {
+      if(res!=processed_imap_indices.end())
+        throw std::logic_error(std::string("processed but default values: index:") + std::to_string(i) + std::string(" value:") + std::to_string(_edgeMap[i]));
+    }
+  }
   if (_edgeMap[imap] != -1){
     std::cout<<vx<<","<<vy<<","<<imap<<","<<_edgeMap[imap]<<","<<MAX_POINTS<< std::endl;
     throw std::logic_error("EdgePointCollection::add_point: point already exists");
   }
-
+  processed_imap_indices.push_back(imap);
   // XXX@stian: new() below is technically UB, but the class has no defined dtors
   // so it's safe to re-new it in place w/o calling the dtor firs.
   
