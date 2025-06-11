@@ -20,6 +20,9 @@ EdgePointCollection::EdgePointCollection(size_t w, size_t h) :
   _processedIn(new unsigned[MAX_POINTS/4]),
   _processedAux(new unsigned[MAX_POINTS/4])
 {
+  processed_imap_indices.clear();
+  processed_imap_indices.reserve(MAX_POINTS);
+  
   if (w*h > MAX_RESOLUTION*MAX_RESOLUTION)
     throw std::length_error("EdgePointCollection::set_frame_size: image resolution is too large");
 
@@ -46,8 +49,6 @@ void EdgePointCollection::add_point(int vx, int vy, float vdx, float vdy)
     throw std::out_of_range("EdgePointCollection::add_point: coordinate out of range");
 
   size_t imap = map_index(vx, vy);
-  static std::vector<size_t> processed_imap_indices;
-  processed_imap_indices.reserve(MAX_POINTS);
 
   for(size_t i = 0; i < MAX_POINTS; i++){
     const auto res = std::find(processed_imap_indices.begin(), processed_imap_indices.end(), i);

@@ -63,6 +63,7 @@ private:
       throw std::out_of_range("EdgePointCollection::test_bit");
     return v[i/4] & (1U << (i & 31));
   }
+  std::vector<size_t> processed_imap_indices;
   
 public:
   EdgePointCollection() = default;
