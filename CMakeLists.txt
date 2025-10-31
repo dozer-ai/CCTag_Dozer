@@ -246,7 +246,7 @@ endif()
 # FIND Intel TBB
 # With MVSC, CMAKE_BUILD_TYPE will always be None, so TBB_USE_DEBUG_BUILD will always be false.
 string(COMPARE EQUAL "${CMAKE_BUILD_TYPE}" Debug TBB_USE_DEBUG_BUILD)
-find_package(TBB 2021.9.0 CONFIG REQUIRED)
+find_package(TBB 2021.5.0 CONFIG REQUIRED)
 message(STATUS "Found TBB: version ${TBB_VERSION}")
 
 add_subdirectory(src)
