@@ -54,11 +54,11 @@ using namespace std;
 
 namespace cctag
 {
-int TagPipe::_tag_id_running_number = 0;
 
 __host__
-TagPipe::TagPipe( const cctag::Parameters& params )
-    : _params( params )
+TagPipe::TagPipe( const cctag::Parameters& params, int pipe_id )
+    : _tag_id( pipe_id )
+    , _params( params )
     , _d_cut_struct_grid( 0 )
     , _h_cut_struct_grid( 0 )
     , _d_nearby_point_grid( 0 )
@@ -67,8 +67,6 @@ TagPipe::TagPipe( const cctag::Parameters& params )
     , _num_nearby_point_grid( 0 )
     , _num_cut_signal_grid( 0 )
 {
-    _tag_id = _tag_id_running_number;
-    _tag_id_running_number++;
     cerr << "Creating TagPipe " << _tag_id << endl;
 }
 
