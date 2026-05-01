@@ -64,6 +64,7 @@ namespace { using CandidatePtr = std::unique_ptr<Candidate>; }
  * BEWARE: this is untested
  */
 std::vector<cctag::TagPipe*> cudaPipelines;
+static std::mutex cudaPipelinesMutex;
 
 static void constructFlowComponentFromSeed(
         EdgePoint * seed,
@@ -737,6 +738,8 @@ cctag::TagPipe* initCuda( int      pipeId,
     PinnedCounters::setGlobalMax( params._pinnedCounters,
                                   params._pinnedNearbyPoints );
 
+    std::lock_guard<std::mutex> lock( cudaPipelinesMutex );
+
     if( cudaPipelines.size() <= pipeId )
     {
         cudaPipelines.resize( pipeId+1 );
@@ -745,7 +748,7 @@ cctag::TagPipe* initCuda( int      pipeId,
     cctag::TagPipe* pipe1 = cudaPipelines[pipeId];
 
     if( ! pipe1 ) {
-        pipe1 = new cctag::TagPipe( params );
+        pipe1 = new cctag::TagPipe( params, pipeId );
         pipe1->initialize( width, height, durations );
         cudaPipelines[pipeId] = pipe1;
     } else {

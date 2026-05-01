@@ -206,7 +206,11 @@ void Frame::applyThinning( )
         <<<1,1,0,_stream>>>
         ( _meta );
 
-    _all_edgecoords.copySizeFromDevice( _stream, EdgeListCont );
+    // Wait for the size to land in pinned host memory before any subsequent
+    // host code reads _all_edgecoords.host.size. The download of the array
+    // data on _download_stream depends on this value, and the async copy on
+    // _stream does not synchronize with reads from a different stream.
+    _all_edgecoords.copySizeFromDevice( _stream, EdgeListWait );
 #if 0
     debugPointIsOnEdge( _d_edges, _all_edgecoords, _stream );
 #endif // NDEBUG

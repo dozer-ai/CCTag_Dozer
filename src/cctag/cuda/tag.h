@@ -40,8 +40,6 @@ class NearbyPointGrid;
 
 class TagPipe
 {
-    static int                  _tag_id_running_number;
-
     int                         _tag_id;
     std::vector<Frame*>         _frame;
     const cctag::Parameters&    _params;
@@ -50,7 +48,7 @@ class TagPipe
     cudaEvent_t                 _uploaded_event;
 
 public:
-    TagPipe( const cctag::Parameters& params );
+    TagPipe( const cctag::Parameters& params, int pipe_id );
 
     inline int getId() const { return _tag_id; }
 
