@@ -246,6 +246,10 @@ endif(CCTAG_NO_COUT)
 if(CCTAG_VISUAL_DEBUG)
   target_compile_definitions(CCTag PRIVATE "-DCCTAG_VISUAL_DEBUG")
 endif(CCTAG_VISUAL_DEBUG)
+if(CCTAG_NDEBUG)
+  target_compile_definitions(CCTag PUBLIC "NDEBUG")
+endif(CCTAG_NDEBUG)
+
 if(CCTAG_EIGEN_MEMORY_ALIGNMENT)
   # If user enabled Eigen alignment assumptions, then allocations should be with appropriate
   # alignment. Fortunately this is fixed in C++17. While we can't upgrade to C++17 just yet, some
