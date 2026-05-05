@@ -516,7 +516,7 @@ bool TagPipe::idCostFunction(
                 <<<1,32,0,tagStream>>>
                   ( d_NearbyPointGrid, STRICT_SAMPLE(gridNSample) );
         } else {
-cerr << __FILE__ << ":" << __LINE__ << " Untested code idBestNearbyPoint32plus" << endl;
+            cerr << __FILE__ << ":" << __LINE__ << " Untested code idBestNearbyPoint32plus" << endl;
             cctag::identification::idBestNearbyPoint32plus
                 <<<1,32,0,tagStream>>>
                   ( d_NearbyPointGrid, STRICT_SAMPLE(gridNSample) );
@@ -542,8 +542,10 @@ void TagPipe::imageCenterOptLoop(
     NearbyPoint*                        cctag_pointer_buffer )
 {
     if( vCutSize != 22 ) {
+#ifndef NDEBUG
         cerr << __FILE__ << ":" << __LINE__ << endl
              << "    " << __func__ << " is called from CPU code with vCutSize " << vCutSize << " instead of 22" << endl;
+#endif
         if( vCutSize > 22 ) {
             exit( -1 );
         }

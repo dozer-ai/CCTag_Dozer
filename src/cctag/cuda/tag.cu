@@ -151,7 +151,9 @@ uint32_t TagPipe::getHeight( size_t layer ) const
 __host__
 void TagPipe::load( int frameId, unsigned char* pix )
 {
+#ifndef NDEBUG
     cerr << "Loading image " << frameId << " into TagPipe " << _tag_id << endl;
+#endif
     _frame[0]->upload( pix ); // async
     _frame[0]->addUploadEvent( ); // async
 }
@@ -349,7 +351,9 @@ void TagPipe::uploadCuts( int                                 numTags,
 
     const int max_cuts_per_Tag = STRICT_CUTSIZE( params._numCutsInIdentStep );
 
+#ifndef NDEBUG
     cerr << endl << "==== Uploading " << numTags << " tags ====" << endl;
+#endif
 
     for( int tagIndex=0; tagIndex<numTags; tagIndex++ ) {
         // cerr << "    Tag " << tagIndex << " has " << vCuts[tagIndex].size() << " cuts" << endl;
