@@ -16,6 +16,8 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <atomic>
+#include <vector>
 
 // #include "cctag/cuda/onoff.h"
 // #include "cctag/Params.hpp"
@@ -63,17 +65,22 @@ public:
 
 class TagThreads
 {
-    TagPipe*         _pipe;
-    int              _layers;
-    TagSemaphore     _start;
-    TagSemaphore     _frameReady;
-    TagSemaphore     _frameDone;
+    TagPipe*                 _pipe;
+    int                      _layers;
+    std::atomic<bool>        _stop;
+    TagSemaphore             _start;
+    TagSemaphore             _frameReady;
+    TagSemaphore             _frameDone;
+    std::vector<TagThread*>  _threadList;
 public:
     TagThreads( );
+    ~TagThreads( );
 
     void init( TagPipe* pipe, int layers );
 
     void oneRound( );
+
+    bool isStopping( ) const { return _stop.load(); }
 
     void startWait( );
     void startPost( );

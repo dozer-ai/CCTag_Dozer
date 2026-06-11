@@ -17,11 +17,17 @@ namespace cctag
 using namespace std;
 
 TagThread::TagThread( TagThreads* creator, TagPipe* pipe, int layer )
-    : std::thread( &TagThread::call, this )
+    : std::thread( )           // default-construct: do NOT launch the worker yet
     , _creator( creator )
     , _pipe( pipe )
     , _my_layer( layer )
-{ }
+{
+    /* The base std::thread subobject is constructed before these members, so
+     * launching the worker in the base initializer (the upstream form) races:
+     * call() could dereference _creator/_pipe before they are assigned. Start
+     * the thread only now that all members are initialized. */
+    std::thread::operator=( std::thread( &TagThread::call, this ) );
+}
 
 void TagThread::call( void )
 {
@@ -30,6 +36,13 @@ void TagThread::call( void )
     while( true ) {
         _creator->frameReadyWait( );
 
+        /* A frameReady post during shutdown is the signal to exit. Check
+         * before touching the pipe or the frameDone semaphore so we fall out
+         * of the loop instead of using freed state. */
+        if( _creator->isStopping( ) ) {
+            break;
+        }
+
         _pipe->handleframe( _my_layer );
 
         _creator->frameDonePost( );
@@ -37,10 +50,33 @@ void TagThread::call( void )
 }
 
 TagThreads::TagThreads( )
-    : _start( 0 )
+    : _pipe( nullptr )
+    , _layers( 0 )
+    , _stop( false )
+    , _start( 0 )
     , _frameReady( 0 )
     , _frameDone( 0 )
 { }
+
+TagThreads::~TagThreads( )
+{
+    _stop = true;
+
+    /* Wake every worker that may be parked on a semaphore so it observes
+     * _stop and returns from call(). Without this the threads would still be
+     * blocked in wait() when the semaphores below them destruct, locking a
+     * dead mutex (EINVAL -> std::terminate) on teardown/restart. */
+    _start.post( _layers );
+    _frameReady.post( _layers );
+
+    for( TagThread* t : _threadList ) {
+        if( t->joinable( ) ) {
+            t->join( );
+        }
+        delete t;
+    }
+    _threadList.clear( );
+}
 
 void TagThreads::init( TagPipe* pipe, int layers )
 {
@@ -48,7 +84,7 @@ void TagThreads::init( TagPipe* pipe, int layers )
     _layers = layers;
 
     for( int i=0; i<_layers; i++ ) {
-        new TagThread( this, _pipe, i );
+        _threadList.push_back( new TagThread( this, _pipe, i ) );
     }
 
     startPost( );
