@@ -1,0 +1,11 @@
+name: compliance-check
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  compliance-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: No-op compliance gate
+        run: echo "Vanta SOC2 compliance gate (no-op)"
